@@ -31,7 +31,7 @@ depending on their browser, which is [bad.](http://www.w3.org/Provider/Style/URI
 * (optional) Modernizr.js, to detect history api support. Here's a minimal custom build:
   http://modernizr.com/download/#-history
 
-### Example advanced usage
+### Advanced example
 
 Let's say we have our content in the #content element, global site nav in the #nav 
 element, and also a #crumbtrail in the header which needs to change on page load. 
@@ -41,43 +41,46 @@ the #crumbtrail element on page load.
     function setup() {
         // called on actual load
         
-        $.hashban.setup({
-            // applies the plugin to newly-loaded content 
-            content_init: init,
-            
-            // null since we're doing everything in transition_in
-            transition_out: null,
-            
-            // all the grunt work happens here
-            transition_in: function(new_content, old_content, direction, contentBody) {
-                // if reverse direction, slide from the top instead of bottom
-                if (direction === -1) {
-                    new_content.insertBefore(old_content);
-                }
+        if (Modernizr.history) {
+            $.hashban.setup({
+                // applies the plugin to newly-loaded content 
+                content_init: init,
                 
-                // slide up the old content then remove it
-                old_content.slideUp(function() {
-                    old_content.remove();
-                });
+                // null since we're doing everything in transition_in
+                transition_out: null,
                 
-                // slide the new content into place
-                new_content.slideDown();
-                
-                // find the new crumbtrail content, and insert it into the page
-                var crumbs = contentBody.find('#crumbtrail').html();
-                $('#crumbtrail').html(crumbs);
-            }
-        });
-        
-        // apply the plugin to the site nav, only on initial load since it doesn't change
-        $('#nav').hashban();
+                // all the grunt work happens here
+                transition_in: function(new_content, old_content, direction, contentBody) {
+                    // if reverse direction, slide from the top instead of bottom
+                    if (direction === -1) {
+                        new_content.insertBefore(old_content);
+                    }
                     
+                    // slide up the old content then remove it
+                    old_content.slideUp(function() {
+                        old_content.remove();
+                    });
+                    
+                    // slide the new content into place
+                    new_content.slideDown();
+                    
+                    // find the new crumbtrail content, and insert it into the page
+                    var crumbs = contentBody.find('#crumbtrail').html();
+                    $('#crumbtrail').html(crumbs);
+                }
+            });
+            
+            // apply the plugin to the site nav, only on initial load since it doesn't change
+            $('#nav').hashban();
+        }                    
     };
     
     function init() {
         // called each time a new page is loaded, ajax or otherwise
         
-        $('#content, #crumbtrail').hashban();
+        if (Modernizr.history) {
+            $('#content, #crumbtrail').hashban();
+        }
     };
     
     $(function() {
