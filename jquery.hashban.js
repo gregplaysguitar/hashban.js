@@ -1,8 +1,16 @@
 /*
 
-A plugin to simplify the addition of ajax-style page transitions to a website.
+hashban.js is a plugin to streamline the addition of ajax-style page transitions
+to a website.
 
-Options:
+Example:
+
+    $.hashban.setup({
+        contentWrapSelector: '#mycontent'
+    });
+    $('#header nav a').hashban();
+
+Options/defaults:
     
     contentWrapSelector: '#content',
     duration: 500,
@@ -13,29 +21,6 @@ Options:
     link_order: [],
     link_filter: null,
     loaderTimeout: 300
-
-API:
-
-Required methods:
-$.hashban.setup = function (user_options)
-$.fn.hashban
-
-Additional methods:
-$.hashban.hijack = function(links)
-$.hashban.loadPage = function (url, push_state)
-
-
-EVENTS:
-
-hashban-unload
-hashban-load
-
-
-TODO:
-
-- Prevent/handle simultaneous transitions?
-- Remove setup method, use settings object
-
 
 */
 (function($) {
@@ -63,10 +48,12 @@ TODO:
     
     function is_sublink(link, possible_sublink) {
         // Determine whether possible_sublink is a child of 
-        // link in the url tree
+        // link in the url tree. Returns false if the links
+        // are the same.
         
         // add trailing slashes if they're missing, to ensure 
-        // that is_sublink(/test', '/test-2') returns false
+        // that is_sublink(/test', '/test-2') returns false,
+        // but is_sublink(/test', '/test/2') returns true. 
         if (possible_sublink.slice(-1) !== '/') {
             possible_sublink += '/';
         }
@@ -74,29 +61,13 @@ TODO:
             link += '/';
         }
         
-        if (possible_sublink.indexOf(link) === 0) {
+        if (link !== possible_sublink && possible_sublink.indexOf(link) === 0) {
             return true;
         }
         else {
             return false;
         }
         
-        /*
-        var link_bits = link.split('/'),
-            sublink_bits = possible_sublink.split('/');
-        
-        if (link_bits.length >= sublink_bits.length) {
-            return false;
-        }
-        else {
-            for (var i = 0; i < sublink_bits.length - 1; i++) {
-                if (sublink_bits[i] !== link_bits[i]) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        */
     };
     
 
