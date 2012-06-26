@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset=utf-8>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+
+<title>Hashban.js demo</title>
+
+<script type="text/javascript" src="modernizr.js"></script>
+
+
+</head>
+
+<body>
+
+<header id="header">
+    <h1>Hashban.js demo</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="page2.html">Another page</a>
+        
+    </nav>
+</header>
+
+<div id="content">
+    <p>Welcome to the hashban.js demo. To see the demo in action, click one of the links above.</p>
+    <p>If you're using Google Chrome, you'll need to be viewing this on an actual webserver, and not
+    via file:// due to Access-Control-Allow-Origin issues.</p>
+</div>
+
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="jquery.hashban.js"></script>
+<script type="text/javascript">
+(function($) {
+    $(function() {
+        var hashban_options = {
+            contentWrapSelector: '#content'
+        };
+        $.hashban.setup(hashban_options);
+        $('#header nav').hashban();
+    });
+})(jQuery);
+</script>
+</body>
+</html>

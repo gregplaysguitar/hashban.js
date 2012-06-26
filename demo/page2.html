@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset=utf-8>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+
+<title>Hashban.js demo</title>
+
+<script type="text/javascript" src="modernizr.js"></script>
+
+
+</head>
+
+<body>
+
+<header id="header">
+    <h1>Hashban.js demo</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="page2.html">Another page</a>
+        
+    </nav>
+</header>
+
+<div id="content">
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et ante non quam mattis scelerisque. Nulla eros justo, aliquet eu interdum eget, porta eu eros. Donec fermentum, diam non viverra porta, purus odio tempus risus, vitae pulvinar arcu sem nec elit. Donec pulvinar, purus at egestas egestas, felis libero commodo est, id rhoncus libero turpis ac diam. Ut ut ultricies nisl. Duis auctor commodo metus id tempor. Nulla non ante eget leo ultricies scelerisque. Aenean id posuere ipsum. Pellentesque semper enim nec nulla egestas sed placerat justo sodales. Sed volutpat sagittis lectus vitae volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ut ante turpis, at ornare tellus. Donec aliquam odio convallis felis luctus tincidunt. Sed sed tincidunt justo. Suspendisse in auctor neque.
+    </p>
+    <p>
+        Vivamus ultricies, justo quis eleifend accumsan, enim libero congue odio, tristique pulvinar nunc sem quis augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus eu augue quis eros egestas luctus vel quis sem. Sed ipsum lacus, fermentum nec mollis non, interdum sollicitudin lorem. Aenean ut nibh orci. Praesent porttitor quam nec felis mollis aliquam. Integer quis tellus eu orci ultrices porttitor. Donec euismod vestibulum risus rutrum bibendum. Phasellus vitae est eros. Aliquam ultricies aliquet mauris, non aliquam lorem pretium et. Aliquam aliquet sodales felis, quis sagittis turpis tincidunt sed. In tincidunt dictum nulla ac vestibulum. Aliquam at arcu quis nisl varius sodales ut quis urna. Nullam sagittis dapibus sagittis. Sed suscipit urna ac dolor luctus eu pellentesque urna adipiscing.
+    </p>
+    <p>
+        Maecenas commodo adipiscing orci quis bibendum. Sed eget eros tortor, non laoreet purus. Ut vel justo ligula. In lobortis ornare rhoncus. Etiam nisl lorem, adipiscing non iaculis id, vulputate id tortor. Duis eget ligula turpis, eget facilisis diam. Nulla facilisis porttitor leo, a elementum nisl porta in. Aenean neque sapien, egestas sit amet molestie et, faucibus vitae odio. Phasellus sit amet lectus ligula, non feugiat mi. Curabitur ut sagittis erat. Donec facilisis lacus quis orci auctor fermentum. Nam facilisis ullamcorper turpis quis consequat.
+    </p>
+    <p>
+        Aliquam erat volutpat. Aenean at nisl purus. Mauris egestas tellus dui. Nulla facilisi. Integer gravida metus lorem. In et quam velit, vitae ultrices mauris. Mauris aliquam ante et nulla vestibulum fringilla a auctor libero. Aenean pulvinar dolor a nisl elementum auctor. Morbi adipiscing eros ut lorem aliquet sollicitudin. Cras scelerisque gravida euismod. Morbi in mi sapien.
+    </p>
+    <p>
+        Morbi in purus vitae augue molestie pretium. Quisque a est sit amet massa venenatis pulvinar in sit amet nunc. Vestibulum at ante augue. In nec ligula a ipsum tristique scelerisque eu eget augue. Sed augue arcu, vestibulum a venenatis a, placerat sed eros. In ultrices massa nec libero scelerisque quis vulputate mauris auctor. In bibendum metus quis elit luctus lobortis. Proin elementum feugiat diam quis porttitor. Donec tempus sagittis leo, nec gravida metus laoreet vel. Sed dolor odio, sodales et egestas nec, gravida non neque. Aliquam et lorem ac lectus pretium facilisis vitae vitae leo. Phasellus fringilla magna ac mauris molestie tincidunt.
+    </p>
+</div>
+
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="jquery.hashban.js"></script>
+<script type="text/javascript">
+(function($) {
+    $(function() {
+        var hashban_options = {
+            contentWrapSelector: '#content'
+        };
+        $.hashban.setup(hashban_options);
+        $('#header nav').hashban();
+    });
+})(jQuery);
+</script>
+</body>
+</html>
+
