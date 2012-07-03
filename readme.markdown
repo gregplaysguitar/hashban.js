@@ -14,7 +14,7 @@ transitions but with the *exact same urls* as the history-enabled ones.
             $.hashban.setup({
                 contentWrapSelector: '#mycontent'
             });
-            $('#header nav a').hashban();
+            $('#header nav').hashban();
         }
     });
 
