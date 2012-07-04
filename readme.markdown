@@ -105,10 +105,6 @@ Default transition duration in ms. Defaults to 500
 #### link_order
 List of urls used to determine the direction of the transition.
 
-#### loader_parent
-When using the default loader, loader_parent is the element to which
-it will be appended. Defaults to the document body.
-
 #### loaderTimeout
 Delay in ms before showing the loader. Used to avoid the loader 
 flashing on fast loads. Default is 300.
@@ -116,7 +112,8 @@ flashing on fast loads. Default is 300.
 #### loader: function(show)
 Function which a) returns the loader element (creating if necessary) and 
 b) shows or hides the element, if the argument is true or false. Defaults 
-to $.hashban.loader
+to `$.hashban.loader`. If you want a custom loader, add it to your html and 
+make sure it has the class 'hashban-loader'.
 
 #### link_filter
 Jquery selector to filter the links that are hijacked via the hashban 

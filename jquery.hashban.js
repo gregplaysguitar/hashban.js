@@ -17,7 +17,6 @@ Options/defaults:
     transition_out: transition_out,
     transition_in: transition_in,
     loader: $.hashban.loader,
-    loader_parent: null,
     link_order: [],
     link_filter: null,
     loaderTimeout: 300
@@ -178,12 +177,7 @@ Options/defaults:
         var loading = $('.hashban-loader');
         if (!loading.length) {
             loading = $('<span>').addClass('hashban-loader').text('Loading').hide();
-            if (options.loader_parent) {
-                options.loader_parent.append(loading);
-            }
-            else {
-                $(options.contentWrapSelector).append(loading);
-            }
+            $(options.contentWrapSelector).append(loading);
         }
         if (visible === true) {
             loading.show();
@@ -218,7 +212,6 @@ Options/defaults:
             transition_in: transition_in,
             content_init: null,
             loader: $.hashban.loader,
-            loader_parent: null,
             link_order: [],
             link_filter: null,
             loaderTimeout: 300
