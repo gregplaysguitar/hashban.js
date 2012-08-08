@@ -1,4 +1,4 @@
-# hashban.js - ajax page transitions made simple
+# hashban.js - ajax page transitions, simplified
 
 hashban.js is a plugin to streamline the addition of ajax-style page transitions
 to a website. You specify which links to "hijack" and how to find your site's 
