@@ -150,20 +150,20 @@ Options/defaults:
     // PUBLIC METHODS
     
     $.fn.hashban = function(){
-        // find suitable links within the given element, and hijack them
-        // to load via ajax
+        // hijack the given links to load via ajax
         
-        var domain = getmatch(window.location.href, '[^/]+//[^/]+', 0),
-            links = this.find('a:not([href^="http://"]), a[href^="' + domain + '"]')
-                        .not('[href$=".xml"],[href$=".pdf"], [href$=".jpg"]');
-        
-        if (options.link_filter) {
-            links = links.filter(options.link_filter);
-        }
-
-        $.hashban.hijack(links);
-        
-        return this;
+        this.each(function() {
+            var me = $(this),
+                url = me.attr('href');
+            
+            if (!me.data('ajaxified')) {
+                me.click(function() {
+                    $.hashban.loadPage(url, true);
+                    return false;
+                });
+                me.data('ajaxified', true);
+            }
+        });
     };
     
     $.hashban = {};
@@ -188,21 +188,21 @@ Options/defaults:
         return loading;
     };
     
-    $.hashban.hijack = function(links) {
-        // hijack the given links to load via ajax
+    $.hashban.hijack = function(el) {
+        // find suitable links within the given element(s), and hijack them
+        // to load via ajax
         
-        links.each(function() {
-            var me = $(this),
-                url = me.attr('href');
-            
-            if (!me.data('ajaxified')) {
-                me.click(function() {
-                    $.hashban.loadPage(url, true);
-                    return false;
-                });
-                me.data('ajaxified', true);
-            }
-        });
+        var domain = getmatch(window.location.href, '[^/]+//[^/]+', 0),
+            links = el.find('a:not([href^="http://"]), a[href^="' + domain + '"]')
+                        .not('[href$=".xml"],[href$=".pdf"], [href$=".jpg"]');
+        
+        if (options.link_filter) {
+            links = links.filter(options.link_filter);
+        }
+
+        $.hashban.hijack(links);
+        
+        return el;
     };
     
     var options = {
