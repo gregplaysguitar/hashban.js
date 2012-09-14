@@ -192,7 +192,7 @@ Options/defaults:
         // find suitable links within the given element(s), and hijack them
         // to load via ajax
         
-        var domain = getmatch(window.location.href, '[^/]+//[^/]+', 0),
+        var domain = getmatch(window.location.href, /[^\/]+\/\/[^\/]+/, 0),
             links = el.find('a:not([href^="http://"]), a[href^="' + domain + '"]')
                         .not('[href$=".xml"],[href$=".pdf"], [href$=".jpg"]');
         
@@ -200,7 +200,7 @@ Options/defaults:
             links = links.filter(options.link_filter);
         }
 
-        $.hashban.hijack(links);
+        links.hashban();
         
         return el;
     };
