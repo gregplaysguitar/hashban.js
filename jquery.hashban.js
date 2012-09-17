@@ -194,7 +194,7 @@ Options/defaults:
         
         var domain = getmatch(window.location.href, /[^\/]+\/\/[^\/]+/, 0),
             links = el.find('a:not([href^="http://"]), a[href^="' + domain + '"]')
-                        .not('[href$=".xml"],[href$=".pdf"], [href$=".jpg"]');
+                        .not('[href$=".xml"],[href$=".pdf"], [href$=".jpg"], [href^="#"]');
         
         if (options.link_filter) {
             links = links.filter(options.link_filter);
