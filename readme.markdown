@@ -144,13 +144,14 @@ content.
 Sets the global plugin options, and binds the window's popstate event.
 
 #### $.fn.hashban
-Find suitable links within the jquery collection, and bind their click 
-event so they will load via hashban.
+Hijack a specific set of links, eg. $('a.hashban').hashban(...);
+
 
 ### Additional methods:
 
-#### $.hashban.hijack: function(links)
-Hijack a specific set of links (a jquery collection)
+#### $.hashban.hijack: function(el)
+Find suitable links within the el (a jquery collection), and bind 
+their click event so they will load via hashban.
 
 #### $.hashban.loadPage: function (url, push_state)
 Load the page at url, changing the page state if push_state is true.
