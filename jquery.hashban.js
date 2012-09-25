@@ -272,7 +272,7 @@ Options/defaults:
                     clearTimeout(loaderTimer);
                     options.loader(false);
                     
-                    var new_content = $('<div class="hashban-content">').append(contentEl.children()),
+                    var new_content = contentEl.children(),
                         old_content = contentWrap.children().not(options.loader());
                     
                     // trigger unload event here so that it won't effect any new content
