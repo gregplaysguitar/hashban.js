@@ -84,19 +84,17 @@ var Hashban = (function($) {
         this.previous_url = window.location.pathname; 
         this.options = $.extend(default_options, user_options);
         
+    };
+
+    Hashban.prototype.bind = function(){
+        var that = this;
         
-        // TODO this was on window.load, maybe needs to be handled in a separate method, 
-        // so it can be bound separately?
-        setTimeout(function() {
-            $(window).bind('popstate', function(e) {
-                if (e.originalEvent.state && 
-                    e.originalEvent.state['handler'] === this.options['uid']) {
-                    this.loadPage(window.location.pathname);
-                }
-            });
-        }, 1);
-            
-        
+        $(window).bind('popstate', function(e) {
+            if (e.originalEvent.state && 
+                e.originalEvent.state['handler'] === that.options['uid']) {
+                that.loadPage(window.location.pathname);
+            }
+        });
     };
     
     Hashban.prototype.hashban = function(links){
@@ -147,7 +145,7 @@ var Hashban = (function($) {
             loaderTimer,
             faded = false,
             completed = false,
-            direction = get_direction(this.previous_url, url, this.link_order);
+            direction = get_direction(this.previous_url, url, this.options.link_order);
     
         if (this.previous_url !== url) {
             this.previous_url = url;
@@ -354,10 +352,10 @@ var Hashban = (function($) {
             if (from_i === -1 || to_i === -1) {
                 // if no exact match, look for parent urls that match
                 for (var i = 0; i < link_order.length; i++) {
-                    if (from_i === -1 && sublink(link_order[i], from)) {
+                    if (from_i === -1 && is_sublink(link_order[i], from)) {
                         from_i = i;
                     }
-                    if (to_i === -1 && sublink(link_order[i], to)) {
+                    if (to_i === -1 && is_sublink(link_order[i], to)) {
                         to_i = i;
                     }
                 }
