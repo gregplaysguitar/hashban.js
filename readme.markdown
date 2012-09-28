@@ -11,10 +11,11 @@ transitions but with the *exact same urls* as the history-enabled ones.
 
     $(function() {
         if (Modernizr.history) {
-            $.hashban.setup({
+            var hashban = Hashban({
                 contentWrapSelector: '#mycontent'
             });
-            $('#header nav').hashban();
+            hashban.hijack($('#header nav'));
+            hashban.bind();
         }
     });
 
@@ -42,7 +43,7 @@ the #crumbtrail element on page load.
         // called on actual load
         
         if (Modernizr.history) {
-            $.hashban.setup({
+            var hashban = Hashban({
                 // applies the plugin to newly-loaded content 
                 content_init: init,
                 
@@ -71,7 +72,7 @@ the #crumbtrail element on page load.
             });
             
             // apply the plugin to the site nav, only on initial load since it doesn't change
-            $('#nav').hashban();
+            hashban.hijack($('#nav'));
         }                    
     };
     
@@ -79,7 +80,7 @@ the #crumbtrail element on page load.
         // called each time a new page is loaded, ajax or otherwise
         
         if (Modernizr.history) {
-            $('#content, #crumbtrail').hashban();
+            hashban.hijack($('#content, #crumbtrail'));
         }
     };
     
@@ -87,8 +88,6 @@ the #crumbtrail element on page load.
         setup();
         init();
     });
-
-    
 
 
 ## Options
@@ -115,10 +114,6 @@ b) shows or hides the element, if the argument is true or false. Defaults
 to `$.hashban.loader`. If you want a custom loader, add it to your html and 
 make sure it has the class 'hashban-loader'.
 
-#### link_filter
-Jquery selector to filter the links that are hijacked via the hashban 
-function.
-
 #### transition_out: function(endfade, old_content, direction, url)
 Function to transition old content off the page. Must call endfade
 callback once done. This option may be null; in that case the
@@ -138,22 +133,22 @@ content.
 
 ## API
 
-### Required methods
+### Initialisation
 
-#### $.hashban.setup: function (user_options)
-Sets the global plugin options, and binds the window's popstate event.
+#### Hashban(user_options)
+Factory function returning a Hashban instance. Takes an object containing plugin options.
 
-#### $.fn.hashban
-Hijack a specific set of links, eg. $('a.hashban').hashban(...);
+### Instance methods:
 
+#### hashban(link_collection)
+Hijacks a specific set of links, eg. `hashban_instance.hashban($('a'));`
 
-### Additional methods:
+#### hijack(el, link_filter)
+Finds suitable links within the el (a jquery collection), and binds their click event so
+they will load via hashban. `link_filter` can be used to exclude links, if needed. 
+eg. `hashban_instance.hijack($('#container'), ':not(.external)');`
 
-#### $.hashban.hijack: function(el)
-Find suitable links within the el (a jquery collection), and bind 
-their click event so they will load via hashban.
-
-#### $.hashban.loadPage: function (url, push_state)
+#### loadPage(url, push_state)
 Load the page at url, changing the page state if push_state is true.
 
 
@@ -173,6 +168,7 @@ Triggered after new content has been added to the document.
 - Handle # in urls (scroll to the element)
 - Prevent/handle simultaneous transitions? (or does this belong in the 
   transition_in method?)
-- Remove setup method, use settings object (?)
-- Remember page scroll position and return to it on back (?
+- Remember page scroll position and return to it on back (?)
+- Figure out a way to have multiple Hashban instances handling their own transitions. Maybe
+  needs some sort of global register?
 
