@@ -170,5 +170,6 @@ Triggered after new content has been added to the document.
   transition_in method?)
 - Remember page scroll position and return to it on back (?)
 - Figure out a way to have multiple Hashban instances handling their own transitions. Maybe
-  needs some sort of global register?
+  needs some sort of global register? Maybe a separate object/function with definable rules
+  for delegating transitions to different instances?
 
