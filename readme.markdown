@@ -24,7 +24,7 @@ transitions but with the *exact same urls* as the history-enabled ones.
 hashban.js does not, and won't ever, fall back to hash or hashbang (#!) urls.
 The hash is for identifying page fragments, not for navigating from page to
 page. Also, doing this would lead to users getting a different url scheme
-depending on their browser, which is [bad.](http://www.w3.org/Provider/Style/URI.html)
+depending on their browser, which is [not cool.](http://www.w3.org/Provider/Style/URI.html)
 
 ### Requirements
 
@@ -38,12 +38,12 @@ Let's say we have our content in the #content element, global site nav in the #n
 element, and also a #crumbtrail in the header which needs to change on page load. 
 The following config demonstrates a custom sliding transition, and how to update
 the #crumbtrail element on page load.
-
+    var hashban;
     function setup() {
         // called on actual load
         
         if (Modernizr.history) {
-            var hashban = Hashban({
+            hashban = Hashban({
                 // applies the plugin to newly-loaded content 
                 content_init: init,
                 
