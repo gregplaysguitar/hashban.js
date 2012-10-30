@@ -38,6 +38,7 @@ Let's say we have our content in the #content element, global site nav in the #n
 element, and also a #crumbtrail in the header which needs to change on page load. 
 The following config demonstrates a custom sliding transition, and how to update
 the #crumbtrail element on page load.
+
     var hashban;
     function setup() {
         // called on actual load
