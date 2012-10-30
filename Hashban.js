@@ -5,10 +5,12 @@ to a website.
 
 Example:
 
-    $.hashban.setup({
+    var hashban = Hashban({
         contentWrapSelector: '#mycontent'
     });
-    $('#header nav a').hashban();
+    hashban.hijack($('#header nav'));
+    hashban.bind();
+
 
 Options/defaults:
     
