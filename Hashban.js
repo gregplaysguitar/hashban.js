@@ -68,8 +68,11 @@ var Hashban = (function($) {
             }
             return loading;
         };
-        
-        var default_options = {
+                
+        this.CACHE = {};
+        this.currentXHR = null;
+        this.previous_url = window.location.pathname; 
+        this.options = $.extend({
             contentWrapSelector: '#content',
             duration: 500,
             transition_out: transition_out,
@@ -79,18 +82,13 @@ var Hashban = (function($) {
             link_order: [],
             loaderTimeout: 300,
             uid: 'Hashban.js'
-        };
-        
-        this.CACHE = {};
-        this.currentXHR = null;
-        this.previous_url = window.location.pathname; 
-        this.options = $.extend(default_options, user_options);
+        }, user_options);
         
     };
 
     Hashban.prototype.bind = function(){
         var that = this;
-        
+
         $(window).bind('popstate', function(e) {
             if (e.originalEvent.state && 
                 e.originalEvent.state['handler'] === that.options['uid']) {
