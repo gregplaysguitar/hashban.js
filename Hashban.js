@@ -48,10 +48,9 @@ var Hashban = (function($) {
         };
         
         function loader(visible) {
-            // this function always returns the loader element,
-            // creating it if necessary, and additionally shows
-            // or hides the loader if the visible parameter is 
-            // exactly true or false
+            // this function toggles the "loading" state, based on
+            // the parameter. If creating a loader element on the 
+            // page, it should return this element.
             
             // TODO uid for loader class?
             

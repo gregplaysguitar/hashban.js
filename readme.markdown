@@ -110,10 +110,12 @@ Delay in ms before showing the loader. Used to avoid the loader
 flashing on fast loads. Default is 300.
 
 #### loader: function(show)
-Function which a) returns the loader element (creating if necessary) and 
-b) shows or hides the element, if the argument is true or false. Defaults 
-to `$.hashban.loader`. If you want a custom loader, add it to your html and 
-make sure it has the class 'hashban-loader'.
+Function which toggles the loading state based on the argument. If
+creating an actual element on the page, it should return this element,
+and reuse it (i.e. don't create a new one each time). Defaults 
+to `$.hashban.loader`, which creates an element with the class
+'hashban-loader' - if an element with this class already exists in
+the html, it will use that.
 
 #### transition_out: function(endfade, old_content, direction, url)
 Function to transition old content off the page. Must call endfade
