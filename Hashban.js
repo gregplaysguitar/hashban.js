@@ -99,7 +99,7 @@ var Hashban = (function($) {
         // EXPERIMENTAL - needed for transition back to the initially-loaded page
         history.replaceState({
             handler: that.options['uid']
-        }, null, window.location.pathname);
+        }, null, window.location);
     };
     
     Hashban.prototype.hashban = function(links){
