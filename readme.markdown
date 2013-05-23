@@ -166,6 +166,8 @@ Triggered after new content has been added to the document.
 
 ## Todo
 
+- Detect middle-click, ⌘+click (Mac) and ctrl+click (Win); use default click behaviour in
+  these cases.
 - Expose a method for updating the cached page content, so ajax page updates 
   can be remembered if the user goes back to the page.)
 - Handle # in urls (scroll to the element)
