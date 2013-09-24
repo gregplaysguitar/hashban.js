@@ -91,7 +91,8 @@ var Hashban = (function($) {
         $(window).bind('popstate', function(e) {
             if (e.originalEvent.state && 
                 e.originalEvent.state['handler'] === that.options['uid']) {
-                that.loadPage(window.location.pathname);
+                that.loadPage(window.location.pathname, false, true);
+                return false;
             }
         });
         
@@ -139,7 +140,7 @@ var Hashban = (function($) {
         return el;
     };
     
-    Hashban.prototype.loadPage = function (url, push_state) {
+    Hashban.prototype.loadPage = function (url, push_state, popped) {
         // Load the specified url, optionally changing the page state
         
         var that = this,
@@ -188,7 +189,7 @@ var Hashban = (function($) {
                     
                     new_content.appendTo(contentWrap).hide();
                     
-                    that.options.transition_in(new_content, old_content, direction, contentBody);
+                    that.options.transition_in(new_content, old_content, direction, contentBody, popped);
                     
                     if (typeof that.options.content_init === 'function') {
                         that.options.content_init(new_content);
@@ -254,7 +255,7 @@ var Hashban = (function($) {
             }
             
             if (old_content.length && typeof this.options.transition_out === 'function') {
-                this.options.transition_out(endfade, old_content, direction, url);
+                this.options.transition_out(endfade, old_content, direction, url, popped);
             }
             else {
                 endfade();
