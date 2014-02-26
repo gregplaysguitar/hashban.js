@@ -88,6 +88,7 @@ var Hashban = (function($) {
     };
     
     Hashban.LOAD_EVENT = 'hashban-load';
+    Hashban.UNLOAD_EVENT = 'hashban-unload';
     
     Hashban.prototype.bind = function(){
         var that = this;
@@ -197,7 +198,7 @@ var Hashban = (function($) {
                     // trigger unload event here so that it won't effect any 
                     // new content
                     // TODO uid here?
-                    $(window).trigger('hashban-unload');
+                    $(window).trigger(Hashban.UNLOAD_EVENT);
                     
                     new_content.appendTo(contentWrap).hide();
                     
@@ -290,7 +291,7 @@ var Hashban = (function($) {
         // TODO - account for uid here
         
         el.on(event, callback);
-        $(window).one('hashban-unload', function() {
+        $(window).one(Hashban.UNLOAD_EVENT, function() {
             el.off(event, callback);
         });
     };
