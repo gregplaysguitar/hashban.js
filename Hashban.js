@@ -39,7 +39,8 @@ var Hashban = (function($) {
             old_content.fadeOut(that.options.duration, endfade);
         };
         
-        function transition_in(new_content, old_content, direction, contentBody) {
+        function transition_in(new_content, old_content, direction,
+                               contentBody) {
             // Default transition in: remove the old content (in case it's
             // still there) and fade the new content in.
             
@@ -56,7 +57,8 @@ var Hashban = (function($) {
             
             var loading = $('.hashban-loader');
             if (!loading.length) {
-                loading = $('<span>').addClass('hashban-loader').text('Loading').hide();
+                loading = $('<span>').addClass('hashban-loader')
+                                     .text('Loading').hide();
                 $(that.options.contentWrapSelector).append(loading);
             }
             if (visible === true) {
@@ -98,7 +100,8 @@ var Hashban = (function($) {
             }
         });
         
-        // EXPERIMENTAL - needed for transition back to the initially-loaded page
+        // EXPERIMENTAL - needed for transition back to the initially-loaded 
+        // page
         history.replaceState({
             handler: that.options['uid']
         }, null, window.location);
@@ -130,8 +133,11 @@ var Hashban = (function($) {
         // to load via ajax
         
         var domain = getmatch(window.location.href, /[^\/]+\/\/[^\/]+/, 0),
-            links = el.find('a:not([href^="http://"]), a[href^="' + domain + '"]')
-                        .not('[href$=".xml"],[href$=".pdf"], [href$=".jpg"], [href$=".gif"], [href$=".png"], [href^="#"]');
+            links = el.find('a:not([href^="http://"]), ' +
+                            'a[href^="' + domain + '"]')
+                        .not('[href$=".xml"], [href$=".pdf"], ' + 
+                             '[href$=".jpg"], [href$=".gif"], ' + 
+                             '[href$=".png"], [href^="#"]');
         
         if (link_filter) {
             links = links.filter(link_filter);
@@ -152,7 +158,8 @@ var Hashban = (function($) {
             loaderTimer,
             faded = false,
             completed = false,
-            direction = get_direction(this.previous_url, url, this.options.link_order);
+            direction = get_direction(this.previous_url, url, 
+                                      this.options.link_order);
     
         if (this.previous_url !== url) {
             this.previous_url = url;
@@ -166,7 +173,8 @@ var Hashban = (function($) {
             function fadein() {
                 var contentBody = Hashban.getBody(html),
                     bodyClass = contentBody.attr('class'),
-                    contentEl = contentBody.find(that.options.contentWrapSelector),
+                    contentEl = contentBody.find(
+                                    that.options.contentWrapSelector),
                     title = getmatch(html, /<title>([\s\S]*?)<\/title>/, 1);
 
                 if (contentEl.length) {
@@ -183,25 +191,30 @@ var Hashban = (function($) {
                     that.options.loader(false);
                     
                     var new_content = contentEl.children(),
-                        old_content = contentWrap.children().not(that.options.loader());
+                        old_content = contentWrap.children()
+                                                 .not(that.options.loader());
                     
-                    // trigger unload event here so that it won't effect any new content
+                    // trigger unload event here so that it won't effect any 
+                    // new content
                     // TODO uid here?
                     $(window).trigger('hashban-unload');
                     
                     new_content.appendTo(contentWrap).hide();
                     
-                    that.options.transition_in(new_content, old_content, direction, contentBody, popped);
+                    that.options.transition_in(new_content, old_content, 
+                                               direction, contentBody, popped);
                     
                     if (typeof that.options.content_init === 'function') {
                         that.options.content_init(new_content);
                     }
                     
-                    // trigger load event here - assume that new content has been added in transition_in
+                    // trigger load event here - assume that new content has 
+                    // been added in transition_in
                     // TODO uid here?
                     $(window).trigger(Hashban.LOAD_EVENT);
     
-                    // work around jquery's auto overflow switch - see http://goo.gl/V9UUw
+                    // work around jquery's auto overflow switch - see 
+                    // http://goo.gl/V9UUw
                     contentWrap.css({
                         overflow: 'visible'
                     });
@@ -229,7 +242,8 @@ var Hashban = (function($) {
                 }
             };
             
-            var old_content = $(this.options.contentWrapSelector).children().not(this.options.loader());
+            var old_content = $(this.options.contentWrapSelector).children()
+                                  .not(this.options.loader());
     
             if (this.CACHE[url]) {
                 html = this.CACHE[url];
@@ -256,8 +270,10 @@ var Hashban = (function($) {
                 });
             }
             
-            if (old_content.length && typeof this.options.transition_out === 'function') {
-                this.options.transition_out(endfade, old_content, direction, url, popped);
+            if (old_content.length && 
+                    typeof this.options.transition_out === 'function') {
+                this.options.transition_out(endfade, old_content, 
+                                            direction, url, popped);
             }
             else {
                 endfade();
@@ -298,7 +314,9 @@ var Hashban = (function($) {
     Hashban.getBody = function (html) {
         // get wrapped body element from an html document
         
-        return $('<div' + getmatch(html, /<body([^>]*>[\S\s]*)<\/body>/, 1) + '</div>');
+        return $('<div' + 
+                 getmatch(html, /<body([^>]*>[\S\s]*)<\/body>/, 1) + 
+                 '</div>');
     };
 
 
