@@ -84,7 +84,9 @@ var Hashban = (function($) {
         }, user_options);
         
     };
-
+    
+    Hashban.LOAD_EVENT = 'hashban-load';
+    
     Hashban.prototype.bind = function(){
         var that = this;
 
@@ -197,7 +199,7 @@ var Hashban = (function($) {
                     
                     // trigger load event here - assume that new content has been added in transition_in
                     // TODO uid here?
-                    $(window).trigger('hashban-load');
+                    $(window).trigger(Hashban.LOAD_EVENT);
     
                     // work around jquery's auto overflow switch - see http://goo.gl/V9UUw
                     contentWrap.css({
