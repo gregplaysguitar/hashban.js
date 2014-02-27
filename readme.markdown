@@ -52,9 +52,10 @@ the #crumbtrail element on page load.
                 transition_out: null,
                 
                 // all the grunt work happens here
-                transition_in: function(new_content, old_content, direction, contentBody) {
-                    // if reverse direction, slide from the top instead of bottom
-                    if (direction === -1) {
+                transition_in: function(new_content, old_content, data) {
+                    // if reverse direction, slide from the top instead of 
+                    // bottom
+                    if (data.direction === -1) {
                         new_content.insertBefore(old_content);
                     }
                     
@@ -67,7 +68,7 @@ the #crumbtrail element on page load.
                     new_content.slideDown();
                     
                     // find the new crumbtrail content, and insert it into the page
-                    var crumbs = contentBody.find('#crumbtrail').html();
+                    var crumbs = data.contentBody.find('#crumbtrail').html();
                     $('#crumbtrail').html(crumbs);
                 }
             });
@@ -117,13 +118,14 @@ to `$.hashban.loader`, which creates an element with the class
 'hashban-loader' - if an element with this class already exists in
 the html, it will use that.
 
-#### transition_out: function(endfade, old_content, direction, url)
+#### transition_out: function(endfade, old_content, data)
 Function to transition old content off the page. Must call endfade
 callback once done. This option may be null; in that case the
 endfade function is called automatically. Default is to fade out old
-content.
+content. The data dict contains the direction, to and from urls, and state
+data for the popstate event if it exists.
 
-#### transition_in: function (new_content, old_content, direction, contentBody)
+#### transition_in: function (new_content, old_content, data)
 Function to transition new content onto the page. Default is to fade in new 
 content. 
 
@@ -132,6 +134,8 @@ content.
 * The contentBody argument provides the entire retrieved document, and can 
   be used to extract extra content out of the site header and footer, for
   example.
+* The data argument is the same as that for `transition_out` with the addition
+  of contentBody (the html returned by the ajax call)
 
 
 ## API

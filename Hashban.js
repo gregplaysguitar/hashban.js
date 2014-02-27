@@ -32,15 +32,14 @@ var Hashban = (function($) {
         if (!(this instanceof Hashban)) return new Hashban(user_options);
         var that = this;
         
-        function transition_out(endfade, old_content, direction, url) {
+        function transition_out(endfade, old_content, data) {
             // Default transition out: fade the old content out, and call
             // end_callback once the transition is done
             
             old_content.fadeOut(that.options.duration, endfade);
         };
         
-        function transition_in(new_content, old_content, direction,
-                               contentBody) {
+        function transition_in(new_content, old_content, data) {
             // Default transition in: remove the old content (in case it's
             // still there) and fade the new content in.
             
@@ -96,16 +95,10 @@ var Hashban = (function($) {
         $(window).bind('popstate', function(e) {
             if (e.originalEvent.state && 
                 e.originalEvent.state['handler'] === that.options['uid']) {
-                that.loadPage(window.location.pathname, false, true);
+                that.loadPage(window.location.pathname, true);
                 return false;
             }
         });
-        
-        // EXPERIMENTAL - needed for transition back to the initially-loaded 
-        // page
-        history.replaceState({
-            handler: that.options['uid']
-        }, null, window.location);
     };
     
     Hashban.prototype.hashban = function(links){
@@ -120,7 +113,7 @@ var Hashban = (function($) {
             
             if (!me.data('hashbanned')) {
                 me.click(function() {
-                    that.loadPage(url, true);
+                    that.loadPage(url);
                     return false;
                 });
                 me.data('hashbanned', true);
@@ -149,8 +142,11 @@ var Hashban = (function($) {
         return el;
     };
     
-    Hashban.prototype.loadPage = function (url, push_state, popped) {
-        // Load the specified url, optionally changing the page state
+    Hashban.prototype.loadPage = function (url, state) {
+        // Load the specified url. If state is passed, it is assumed to be the 
+        // state dictionary from the popstate event, (i.e. back button) and the
+        // pageload is handled accordingly. Otherwise, it is assumed the 
+        // pageLoad was initiated by the user clicking a link.
         
         var that = this,
             contentWrap = $(this.options.contentWrapSelector),
@@ -159,12 +155,25 @@ var Hashban = (function($) {
             loaderTimer,
             faded = false,
             completed = false,
-            direction = get_direction(this.previous_url, url, 
-                                      this.options.link_order);
+            transition_data = {
+                direction: get_direction(this.previous_url, url, 
+                                         this.options.link_order),
+                from: this.previous_url,
+                to: url,
+                state: state
+            };
     
         if (this.previous_url !== url) {
-            this.previous_url = url;
             
+            // save scroll position in current state; also means the transition
+            // will work if the user navigates to the originally loaded page
+            // via the back button
+            if (!state) {
+                window.history.replaceState(that.buildState({
+                    scrollTop: $(window).scrollTop()
+                }), null, window.location);
+            }
+        
             // Order of events       
             // 1. start loading
             // 2. transition out old content
@@ -179,10 +188,9 @@ var Hashban = (function($) {
                     title = getmatch(html, /<title>([\s\S]*?)<\/title>/, 1);
 
                 if (contentEl.length) {
-                    if (push_state) {
-                        history.pushState({
-                            handler: that.options['uid']
-                        }, null, url);
+                    if (!state) {
+                        // assume a link was clicked if no state present
+                        history.pushState(that.buildState(), null, url);
                     }
                     document.title = $('<div>').html(title).text();
                                     
@@ -202,12 +210,19 @@ var Hashban = (function($) {
                     
                     new_content.appendTo(contentWrap).hide();
                     
+                    transition_data.contentBody = contentBody;
                     that.options.transition_in(new_content, old_content, 
-                                               direction, contentBody, popped);
+                                               transition_data);
                     
                     if (typeof that.options.content_init === 'function') {
                         that.options.content_init(new_content);
                     }
+                    
+                    // if the load was triggered by popstate, eg. the back 
+                    // button and not a clicked link, restore scroll position
+                    if (state && state.scrollTop) {
+                        $(window).scrollTop(state.scrollTop);
+                    } 
                     
                     // trigger load event here - assume that new content has 
                     // been added in transition_in
@@ -220,6 +235,7 @@ var Hashban = (function($) {
                         overflow: 'visible'
                     });
                     
+                    that.previous_url = url;
                 }
                 else {
                     // reload the page to show the error
@@ -229,6 +245,8 @@ var Hashban = (function($) {
             };
                         
             function endfade() {
+                // Called once the transition_out animation is completed,
+                // or immediately if there is no transition_out.
                 if (!completed) {
                     completed = true;
                     if (html) {
@@ -271,10 +289,9 @@ var Hashban = (function($) {
                 });
             }
             
-            if (old_content.length && 
-                    typeof this.options.transition_out === 'function') {
+            if (typeof this.options.transition_out === 'function') {
                 this.options.transition_out(endfade, old_content, 
-                                            direction, url, popped);
+                                            transition_data);
             }
             else {
                 endfade();
@@ -282,6 +299,16 @@ var Hashban = (function($) {
             
         }
     };
+    
+    Hashban.prototype.buildState = function(params) {
+        // builds the History state dict, starting with a common base and 
+        // adding the params obj
+        
+        return $.extend({
+            handler: this.options['uid']
+        }, params || {});
+    };
+    
     
     // PUBLIC INSTANCE METHODS
     
@@ -337,7 +364,7 @@ var Hashban = (function($) {
         }
     };
     
-
+    
     function get_direction(from, to, link_order) {
         // Returns 1 (forwards) or -1 (backwards) for a given transition.
         // 0 is returned when the direction cannot be inferred.
@@ -427,9 +454,6 @@ var Hashban = (function($) {
     };
     
     
-    
-
-
     return Hashban;
     
 })(jQuery);
