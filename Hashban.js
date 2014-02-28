@@ -127,7 +127,7 @@ var Hashban = (function($) {
         // to load via ajax
         
         var domain = getmatch(window.location.href, /[^\/]+\/\/[^\/]+/, 0),
-            links = el.find('a:not([href^="http://"]), ' +
+            links = el.find('a[href]:not([href^="http://"]), ' +
                             'a[href^="' + domain + '"]')
                         .not('[href$=".xml"], [href$=".pdf"], ' + 
                              '[href$=".jpg"], [href$=".gif"], ' + 
