@@ -13,39 +13,55 @@ Example:
 
 
 Options/defaults:
-    
+
     contentWrapSelector: '#content',
-    duration: 500,
-    transition_out: transition_out,
-    transition_in: transition_in,
+    transitions: [DefaultTransition],
+    transition_out: null,
+    transition_in: null,
     loader: $.hashban.loader,
     link_order: [],
     link_filter: null,
     loaderTimeout: 300
+
+Transitions:
+
+The transitions option should provide a list of Transition pseudoclasses, 
+inheriting from Hashban.DefaultTransition and defining the following methods:
+
+    should_use() - returns true if this transition should be used
+    transition_out(endfade) - performs "out" transition then calls
+                    endfade callback
+    transition_in(new_content, contentBody) - performs "in" transition
+
+The Transition objects will be tested in order and the first valid one found
+will be used. If none match, the last will be used.
 
 */
 
 
 var Hashban = (function($) {
     
+    function DefaultTransition(old_content, data){
+        this.old_content = old_content;
+        this.data = data;
+        this.duration = 500;
+    };
+    DefaultTransition.prototype = {
+        should_use: function() {
+            return true;
+        },
+        transition_out: function(endfade) {
+            this.old_content.fadeOut(this.duration, endfade);
+        },
+        transition_in: function(new_content, contentBody) {
+            this.old_content.remove();
+            new_content.fadeIn(this.duration);
+        }
+    };
+    
     function Hashban(user_options) {
         if (!(this instanceof Hashban)) return new Hashban(user_options);
         var that = this;
-        
-        function transition_out(endfade, old_content, data) {
-            // Default transition out: fade the old content out, and call
-            // end_callback once the transition is done
-            
-            old_content.fadeOut(that.options.duration, endfade);
-        };
-        
-        function transition_in(new_content, old_content, data) {
-            // Default transition in: remove the old content (in case it's
-            // still there) and fade the new content in.
-            
-            old_content.remove();
-            new_content.fadeIn(that.options.duration);
-        };
         
         function loader(visible) {
             // this function toggles the "loading" state, based on
@@ -68,30 +84,29 @@ var Hashban = (function($) {
             }
             return loading;
         };
-                
+        
         this.CACHE = {};
         this.currentXHR = null;
         this.previous_url = window.location.pathname; 
         this.options = $.extend({
             contentWrapSelector: '#content',
-            duration: 500,
-            transition_out: transition_out,
-            transition_in: transition_in,
+            transitions: [this.DefaultTransition],
             content_init: null,
             loader: loader,
             link_order: [],
             loaderTimeout: 300,
             uid: 'Hashban.js'
         }, user_options);
-        
     };
     
     Hashban.LOAD_EVENT = 'hashban-load';
     Hashban.UNLOAD_EVENT = 'hashban-unload';
     
+    Hashban.DefaultTransition = DefaultTransition;
+    
     Hashban.prototype.bind = function(){
         var that = this;
-
+        
         $(window).bind('popstate', function(e) {
             if (e.originalEvent.state && 
                 e.originalEvent.state['handler'] === that.options['uid']) {
@@ -108,7 +123,7 @@ var Hashban = (function($) {
         links.each(function() {
             var me = $(this),
                 url = me.attr('href');
-                
+            
             // TODO uid here? can you bind two Hashbans to one link?
             
             if (!me.data('hashbanned')) {
@@ -119,7 +134,6 @@ var Hashban = (function($) {
                 me.data('hashbanned', true);
             }
         });
-        
     };
     
     Hashban.prototype.hijack = function(el, link_filter) {
@@ -136,12 +150,12 @@ var Hashban = (function($) {
         if (link_filter) {
             links = links.filter(link_filter);
         }
-    
+        
         this.hashban(links);
         
         return el;
     };
-    
+
     Hashban.prototype.loadPage = function (url, state) {
         // Load the specified url. If state is passed, it is assumed to be the 
         // state dictionary from the popstate event, (i.e. back button) and the
@@ -161,10 +175,10 @@ var Hashban = (function($) {
                 from: this.previous_url,
                 to: url,
                 state: state
-            };
-    
+            },
+            old_content = contentWrap.children().not(this.options.loader());
+        
         if (this.previous_url !== url) {
-            
             // save scroll position in current state; also means the transition
             // will work if the user navigates to the originally loaded page
             // via the back button
@@ -173,27 +187,37 @@ var Hashban = (function($) {
                     scrollTop: $(window).scrollTop()
                 }), null, window.location);
             }
-        
-            // Order of events       
+            
+            // find appropriate transition (last one is default)
+            var transitions = this.options.transitions,
+                transition;
+            for (var i = 0; i < transitions.length; i++) {
+                transition = new transitions[i](old_content, transition_data);
+                if (transition.should_use()) {
+                    break;
+                }
+            }
+            
+            // Order of events:
             // 1. start loading
             // 2. transition out old content
             // 3. show spinner
             // 4. once load and transition out are both done, transition in
-    
+            
             function fadein() {
                 var contentBody = Hashban.getBody(html),
                     bodyClass = contentBody.attr('class'),
                     contentEl = contentBody.find(
                                     that.options.contentWrapSelector),
                     title = getmatch(html, /<title>([\s\S]*?)<\/title>/, 1);
-
+                
                 if (contentEl.length) {
                     if (!state) {
                         // assume a link was clicked if no state present
                         history.pushState(that.buildState(), null, url);
                     }
                     document.title = $('<div>').html(title).text();
-                                    
+                    
                     $('body').attr('class', bodyClass);
                     
                     clearTimeout(loaderTimer);
@@ -210,9 +234,8 @@ var Hashban = (function($) {
                     
                     new_content.appendTo(contentWrap).hide();
                     
-                    transition_data.contentBody = contentBody;
-                    that.options.transition_in(new_content, old_content, 
-                                               transition_data);
+                    //transition_data.contentBody = contentBody;
+                    transition.transition_in(new_content, contentBody);
                     
                     if (typeof that.options.content_init === 'function') {
                         that.options.content_init(new_content);
@@ -228,7 +251,7 @@ var Hashban = (function($) {
                     // been added in transition_in
                     // TODO uid here?
                     $(window).trigger(Hashban.LOAD_EVENT);
-    
+                    
                     // work around jquery's auto overflow switch - see 
                     // http://goo.gl/V9UUw
                     contentWrap.css({
@@ -241,9 +264,8 @@ var Hashban = (function($) {
                     // reload the page to show the error
                     window.location.href = url;
                 }
-            
             };
-                        
+            
             function endfade() {
                 // Called once the transition_out animation is completed,
                 // or immediately if there is no transition_out.
@@ -261,9 +283,6 @@ var Hashban = (function($) {
                 }
             };
             
-            var old_content = $(this.options.contentWrapSelector).children()
-                                  .not(this.options.loader());
-    
             if (this.CACHE[url]) {
                 html = this.CACHE[url];
             }
@@ -289,17 +308,15 @@ var Hashban = (function($) {
                 });
             }
             
-            if (typeof this.options.transition_out === 'function') {
-                this.options.transition_out(endfade, old_content, 
-                                            transition_data);
+            if (typeof transition.transition_out === 'function') {
+                transition.transition_out(endfade);
             }
             else {
                 endfade();
             }
-            
         }
     };
-    
+
     Hashban.prototype.buildState = function(params) {
         // builds the History state dict, starting with a common base and 
         // adding the params obj
@@ -346,11 +363,11 @@ var Hashban = (function($) {
                  getmatch(html, /<body([^>]*>[\S\s]*)<\/body>/, 1) + 
                  '</div>');
     };
-
-
+    
+    
     
     // INTERNAL UTILITIES
-
+    
     function getmatch(str, re, i) {
         // find and return the ith matched pattern in a regex, or 
         // return a blank string if not found
@@ -426,10 +443,9 @@ var Hashban = (function($) {
                 // return forwards
                 return 1;
             }
-            
-        }          
+        }
     }; 
-        
+    
     function is_sublink(link, possible_sublink) {
         // Determine whether possible_sublink is a child of 
         // link in the url tree. Returns false if the links
@@ -455,5 +471,5 @@ var Hashban = (function($) {
     
     
     return Hashban;
-    
+
 })(jQuery);

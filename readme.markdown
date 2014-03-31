@@ -44,6 +44,13 @@ the #crumbtrail element on page load.
         // called on actual load
         
         if (Modernizr.history) {
+            
+            // TODO fix this up
+            function Transition() {
+                Hashban.DefaultTransition.apply(this, arguments);
+            };
+            Transition.prototype = Hashban.DefaultTransition;
+            
             hashban = Hashban({
                 // applies the plugin to newly-loaded content 
                 content_init: init,
