@@ -160,7 +160,7 @@ var Hashban = (function($) {
         return el;
     };
 
-    Hashban.prototype.loadPage = function (url, state) {
+    Hashban.prototype.loadPage = function (url, state, force) {
         // Load the specified url. If state is passed, it is assumed to be the 
         // state dictionary from the popstate event, (i.e. back button) and the
         // pageload is handled accordingly. Otherwise, it is assumed the 
@@ -182,7 +182,7 @@ var Hashban = (function($) {
             },
             old_content = contentWrap.children().not(this.options.loader());
         
-        if (this.previous_url !== url) {
+        if (this.previous_url !== url || force) {
             // save scroll position in current state; also means the transition
             // will work if the user navigates to the originally loaded page
             // via the back button
