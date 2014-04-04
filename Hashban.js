@@ -136,16 +136,20 @@ var Hashban = (function($) {
         });
     };
     
+    Hashban.prototype.filter_links = function(links) {
+        var domain = getmatch(window.location.href, /[^\/]+\/\/[^\/]+/, 0);
+        return links.filter('a[href]:not([href^="http://"]), ' +
+                            'a[href^="' + domain + '"]')
+                    .not('[href$=".xml"], [href$=".pdf"], ' + 
+                         '[href$=".jpg"], [href$=".gif"], ' + 
+                         '[href$=".png"], [href^="#"]');
+    };
     Hashban.prototype.hijack = function(el, link_filter) {
         // find suitable links within the given element(s), and hijack them
         // to load via ajax
         
         var domain = getmatch(window.location.href, /[^\/]+\/\/[^\/]+/, 0),
-            links = el.find('a[href]:not([href^="http://"]), ' +
-                            'a[href^="' + domain + '"]')
-                        .not('[href$=".xml"], [href$=".pdf"], ' + 
-                             '[href$=".jpg"], [href$=".gif"], ' + 
-                             '[href$=".png"], [href^="#"]');
+            links = this.filter_links(el.find('a'));
         
         if (link_filter) {
             links = links.filter(link_filter);
