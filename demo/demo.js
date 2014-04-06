@@ -10,14 +10,9 @@
 
             // Provide custom transition_in behaviour
             this.transition_in = function(new_content, contentBody) {
-                // slide the new content up
+                // reveal the new content
                 this.old_content.remove();
-                new_content.css({
-                    position: 'relative',
-                    top: 1000
-                }).show().animate({
-                    top: 0
-                }, 300);
+                new_content.fadeIn();
                 
                 // swap in the new header 
                 $('#header h1').css('position', 'relative').animate({
