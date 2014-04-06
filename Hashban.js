@@ -180,7 +180,7 @@ var Hashban = (function($) {
             },
             old_content = contentWrap.children().not(this.options.loader());
         
-        if (this.previous_url !== url || force) {
+        if (this.previous_url !== Hashban.absolute_url(url) || force) {
             // save scroll position in current state; also means the transition
             // will work if the user navigates to the originally loaded page
             // via the back button
@@ -366,6 +366,13 @@ var Hashban = (function($) {
                  '</div>');
     };
     
+    Hashban.absolute_url = function(url) {
+        if (!url.match(/^(?:\/|https?:\/\/|:\/\/)/)) {
+            // must be relative
+            return window.location.pathname.replace(/\/[^\/]+$/, '/') + url;
+        }
+        return url;
+    };
     
     
     // INTERNAL UTILITIES
