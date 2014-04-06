@@ -16,8 +16,6 @@ Options/defaults:
 
     contentWrapSelector: '#content',
     transitions: [DefaultTransition],
-    transition_out: null,
-    transition_in: null,
     loader: $.hashban.loader,
     link_order: [],
     link_filter: null,
@@ -90,7 +88,7 @@ var Hashban = (function($) {
         this.previous_url = window.location.pathname; 
         this.options = $.extend({
             contentWrapSelector: '#content',
-            transitions: [this.DefaultTransition],
+            transitions: [DefaultTransition],
             content_init: null,
             loader: loader,
             link_order: [],
