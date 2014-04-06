@@ -16,7 +16,7 @@ Options/defaults:
 
     contentWrapSelector: '#content',
     transitions: [DefaultTransition],
-    loader: $.hashban.loader,
+    loader: Hashban.prototype.loader,
     link_order: [],
     link_filter: null,
     loaderTimeout: 300
@@ -61,28 +61,6 @@ var Hashban = (function($) {
         if (!(this instanceof Hashban)) return new Hashban(user_options);
         var that = this;
         
-        function loader(visible) {
-            // this function toggles the "loading" state, based on
-            // the parameter. If creating a loader element on the 
-            // page, it should return this element.
-            
-            // TODO uid for loader class?
-            
-            var loading = $('.hashban-loader');
-            if (!loading.length) {
-                loading = $('<span>').addClass('hashban-loader')
-                                     .text('Loading').hide();
-                $(that.options.contentWrapSelector).append(loading);
-            }
-            if (visible === true) {
-                loading.show();
-            }
-            else if (visible === false) {
-                loading.hide();
-            }
-            return loading;
-        };
-        
         this.CACHE = {};
         this.currentXHR = null;
         this.previous_url = window.location.pathname; 
@@ -90,7 +68,9 @@ var Hashban = (function($) {
             contentWrapSelector: '#content',
             transitions: [DefaultTransition],
             content_init: null,
-            loader: loader,
+            loader: function(visible) {
+                return that.loader(visible);
+            },
             link_order: [],
             loaderTimeout: 300,
             uid: 'Hashban.js'
@@ -328,6 +308,27 @@ var Hashban = (function($) {
         }, params || {});
     };
     
+    Hashban.prototype.loader = function(visible) {
+        // this function toggles the "loading" state, based on
+        // the parameter. If creating a loader element on the 
+        // page, it should return this element.
+        
+        var loading = $('.hashban-loader');
+        if (!loading.length) {
+            loading = $('<span>').addClass('hashban-loader')
+                                 .text('Loading').hide();
+            $(this.options.contentWrapSelector).append(loading);
+        }
+        if (visible === true) {
+            loading.show();
+        }
+        else if (visible === false) {
+            loading.hide();
+        }
+        
+        return loading;
+    };
+    
     
     // PUBLIC INSTANCE METHODS
     
@@ -389,7 +390,6 @@ var Hashban = (function($) {
             return '';
         }
     };
-    
     
     function get_direction(from, to, link_order) {
         // Returns 1 (forwards) or -1 (backwards) for a given transition.
