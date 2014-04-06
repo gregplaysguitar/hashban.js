@@ -10,12 +10,25 @@
 
             // Provide custom transition_in behaviour
             this.transition_in = function(new_content, contentBody) {
+                // slide the new content up
                 this.old_content.remove();
                 new_content.css({
                     position: 'relative',
                     top: 1000
                 }).show().animate({
                     top: 0
+                }, 300);
+                
+                // swap in the new header 
+                $('#header h1').css('position', 'relative').animate({
+                    left: '-2000px'
+                }, 300).queue(function(next) {
+                    $(this).html(contentBody.find('#header h1').html()).css({
+                        left: '2000px'
+                    });
+                    next();
+                }).animate({
+                    left: 0
                 }, 300);
             };
 
