@@ -1,0 +1,8 @@
+#header, #content {
+    width: 600px;
+    margin: 0 auto;
+}
+
+#header nav a {
+    margin: 0 10px 0 0;
+}

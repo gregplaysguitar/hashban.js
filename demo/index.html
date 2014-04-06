@@ -11,8 +11,8 @@
 <title>Hashban.js demo</title>
 
 <script type="text/javascript" src="modernizr.js"></script>
-
-
+<link href="style.css" rel="stylesheet" type="text/css" 
+      media="screen,projection,print"></head>
 </head>
 
 <body>
@@ -21,32 +21,30 @@
     <h1>Hashban.js demo</h1>
     <nav>
         <a href="index.html">Home</a>
-        <a href="page2.html">Another page</a>
-        
+        <a href="page2.html">Page 2</a>
+        <a href="page3.html">Page 3</a>
     </nav>
 </header>
 
 <div id="content">
-    <p>Welcome to the hashban.js demo. To see the demo in action, click one of the links above.</p>
-    <p>If you're using Google Chrome, you'll need to be viewing this on an actual webserver, and not
-    via file:// due to Access-Control-Allow-Origin issues.</p>
+    <p>Welcome to the hashban.js demo. To see the demo in action, click one of 
+       the links above.</p>
+    <p>If you're using Google Chrome, you'll need to be viewing this on an 
+       actual webserver, and not via file:// due to 
+       Access-Control-Allow-Origin issues. To create a simple webserver with
+       python, serving the demo at 
+       <a href="http://localhost:8000">localhost:8000</a>, type:</p>
+    <pre>
+        > cd hashban.js/demo
+        > python -m SimpleHTTPServer
+    </pre>
+    <p>
 </div>
 
 
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="Hashban.js"></script>
-<script type="text/javascript">
-(function($) {
-    $(function() {
-        var hashban_options = {
-                contentWrapSelector: '#content'
-            },
-            hashban = Hashban(hashban_options);
-        hashban.hijack($('#header nav'));
-        hashban.bind();
-    });
-})(jQuery);
-</script>
+<script type="text/javascript" src="demo.js"></script>
 </body>
 </html>

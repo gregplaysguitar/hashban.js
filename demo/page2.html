@@ -11,6 +11,8 @@
 <title>Hashban.js demo</title>
 
 <script type="text/javascript" src="modernizr.js"></script>
+<link href="style.css" rel="stylesheet" type="text/css" 
+      media="screen,projection,print"></head>
 
 
 </head>
@@ -21,8 +23,8 @@
     <h1>Hashban.js demo</h1>
     <nav>
         <a href="index.html">Home</a>
-        <a href="page2.html">Another page</a>
-        
+        <a href="page2.html">Page 2</a>
+        <a href="page3.html">Page 3</a>
     </nav>
 </header>
 
@@ -33,33 +35,14 @@
     <p>
         Vivamus ultricies, justo quis eleifend accumsan, enim libero congue odio, tristique pulvinar nunc sem quis augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus eu augue quis eros egestas luctus vel quis sem. Sed ipsum lacus, fermentum nec mollis non, interdum sollicitudin lorem. Aenean ut nibh orci. Praesent porttitor quam nec felis mollis aliquam. Integer quis tellus eu orci ultrices porttitor. Donec euismod vestibulum risus rutrum bibendum. Phasellus vitae est eros. Aliquam ultricies aliquet mauris, non aliquam lorem pretium et. Aliquam aliquet sodales felis, quis sagittis turpis tincidunt sed. In tincidunt dictum nulla ac vestibulum. Aliquam at arcu quis nisl varius sodales ut quis urna. Nullam sagittis dapibus sagittis. Sed suscipit urna ac dolor luctus eu pellentesque urna adipiscing.
     </p>
-    <p>
-        Maecenas commodo adipiscing orci quis bibendum. Sed eget eros tortor, non laoreet purus. Ut vel justo ligula. In lobortis ornare rhoncus. Etiam nisl lorem, adipiscing non iaculis id, vulputate id tortor. Duis eget ligula turpis, eget facilisis diam. Nulla facilisis porttitor leo, a elementum nisl porta in. Aenean neque sapien, egestas sit amet molestie et, faucibus vitae odio. Phasellus sit amet lectus ligula, non feugiat mi. Curabitur ut sagittis erat. Donec facilisis lacus quis orci auctor fermentum. Nam facilisis ullamcorper turpis quis consequat.
-    </p>
-    <p>
-        Aliquam erat volutpat. Aenean at nisl purus. Mauris egestas tellus dui. Nulla facilisi. Integer gravida metus lorem. In et quam velit, vitae ultrices mauris. Mauris aliquam ante et nulla vestibulum fringilla a auctor libero. Aenean pulvinar dolor a nisl elementum auctor. Morbi adipiscing eros ut lorem aliquet sollicitudin. Cras scelerisque gravida euismod. Morbi in mi sapien.
-    </p>
-    <p>
-        Morbi in purus vitae augue molestie pretium. Quisque a est sit amet massa venenatis pulvinar in sit amet nunc. Vestibulum at ante augue. In nec ligula a ipsum tristique scelerisque eu eget augue. Sed augue arcu, vestibulum a venenatis a, placerat sed eros. In ultrices massa nec libero scelerisque quis vulputate mauris auctor. In bibendum metus quis elit luctus lobortis. Proin elementum feugiat diam quis porttitor. Donec tempus sagittis leo, nec gravida metus laoreet vel. Sed dolor odio, sodales et egestas nec, gravida non neque. Aliquam et lorem ac lectus pretium facilisis vitae vitae leo. Phasellus fringilla magna ac mauris molestie tincidunt.
-    </p>
+    <p><a href="index.html">Back to main page</a></p>
+
 </div>
 
 
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="Hashban.js"></script>
-<script type="text/javascript">
-(function($) {
-    $(function() {
-        var hashban_options = {
-                contentWrapSelector: '#content'
-            },
-            hashban = Hashban(hashban_options);
-        hashban.hijack($('#header nav'));
-        hashban.bind();
-    });
-})(jQuery);
-</script>
+<script type="text/javascript" src="demo.js"></script>
 </body>
 </html>
-
