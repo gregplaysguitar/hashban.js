@@ -90,7 +90,7 @@ the #crumbtrail element on page load.
         // called each time a new page is loaded, ajax or otherwise
         
         if (Modernizr.history) {
-            hashban.hijack($('#content, #crumbtrail'));
+            hashban.hijack($('#content'));
         }
     };
     
