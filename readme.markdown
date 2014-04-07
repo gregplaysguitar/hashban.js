@@ -120,7 +120,7 @@ flashing on fast page loads. Default is 300.
 Function which toggles the loading state based on the argument. If
 creating an actual element on the page, it should return this element,
 and reuse it (i.e. don't create a new one each time). Defaults 
-to `$.hashban.loader`, which creates an element with the class
+to `Hashban.prototype.loader`, which creates an element with the class
 'hashban-loader' - if an element with this class already exists in
 the html, it will use that.
 
