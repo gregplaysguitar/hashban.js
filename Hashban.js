@@ -25,7 +25,8 @@ Transitions:
 
 The transitions option should provide a list of Transition pseudoclasses, 
 inheriting from Hashban.DefaultTransition and defining the following methods:
-
+    
+    constructor(old_content, data)
     should_use() - returns true if this transition should be used
     transition_out(endfade) - performs "out" transition then calls
                     endfade callback

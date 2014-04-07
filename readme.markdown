@@ -45,42 +45,43 @@ the #crumbtrail element on page load.
         
         if (Modernizr.history) {
             
-            // TODO fix this up
             function Transition() {
+                // Define a custom transition class, using js pseudo-inheritance 
+                // to inherit methods from Hashban.DefaultTransition
+            
+                // Apply the parent's constructor
                 Hashban.DefaultTransition.apply(this, arguments);
+            
+                // Provide custom transition_in behaviour
+                this.transition_in = function(new_content, contentBody) {
+                    // reveal the new content
+                    this.old_content.remove();
+                    new_content.fadeIn();
+                    
+                    // swap in the new header 
+                    $('#header h1').css('position', 'relative').animate({
+                        left: '-2000px'
+                    }, 300).queue(function(next) {
+                        $(this).html(contentBody.find('#header h1').html()).css({
+                            left: '2000px'
+                        });
+                        next();
+                    }).animate({
+                        left: 0
+                    }, 300);
+                };
             };
-            Transition.prototype = Hashban.DefaultTransition;
+            // Inherit non-overridden methods from parent
+            Transition.prototype = new Hashban.DefaultTransition();
             
             hashban = Hashban({
                 // applies the plugin to newly-loaded content 
                 content_init: init,
-                
-                // null since we're doing everything in transition_in
-                transition_out: null,
-                
-                // all the grunt work happens here
-                transition_in: function(new_content, old_content, data) {
-                    // if reverse direction, slide from the top instead of 
-                    // bottom
-                    if (data.direction === -1) {
-                        new_content.insertBefore(old_content);
-                    }
-                    
-                    // slide up the old content then remove it
-                    old_content.slideUp(function() {
-                        old_content.remove();
-                    });
-                    
-                    // slide the new content into place
-                    new_content.slideDown();
-                    
-                    // find the new crumbtrail content, and insert it into the page
-                    var crumbs = data.contentBody.find('#crumbtrail').html();
-                    $('#crumbtrail').html(crumbs);
-                }
+                transitions: [Transition],
             });
             
-            // apply the plugin to the site nav, only on initial load since it doesn't change
+            // apply the plugin to the site nav, only on initial load since it 
+            // doesn't change
             hashban.hijack($('#nav'));
         }                    
     };
@@ -107,15 +108,13 @@ Selector to find the site's content container. Defaults to '#content'
 #### content_init: function(new_content)
 Function to perform any required initialisation on newly loaded content.
 
-#### duration
-Default transition duration in ms. Defaults to 500
-
 #### link_order
-List of urls used to determine the direction of the transition.
+List of urls used to determine the direction of the transition, which is passed
+to the `transition_in` and `transition_out` functions
 
 #### loaderTimeout
 Delay in ms before showing the loader. Used to avoid the loader 
-flashing on fast loads. Default is 300.
+flashing on fast page loads. Default is 300.
 
 #### loader: function(show)
 Function which toggles the loading state based on the argument. If
@@ -125,24 +124,57 @@ to `$.hashban.loader`, which creates an element with the class
 'hashban-loader' - if an element with this class already exists in
 the html, it will use that.
 
-#### transition_out: function(endfade, old_content, data)
+#### transitions
+Array of Transition objects which implement the methods described in the 
+Transitions section below. The first object who's `should_use` method returns
+true will be used, or the last one will be used by default if no matches
+are found.
+
+## Transitions
+
+The transitions option allows different transitions for different pages or 
+groups of pages. Each object in the array should define a `should_use` method,
+which is used to determine which transition to use. The `transition_in` and 
+`transition_out` methods perform the actual transition. 
+
+    function Transition(old_content, data){
+        this.old_content = old_content;
+        this.data = data;
+    };
+    Transition.prototype = {
+        should_use: function() {
+            // return true if this transition should be used here
+        },
+        transition_out: function(endfade) {
+            // remove old content then call endfade
+        },
+        transition_in: function(new_content, contentBody) {
+            // reveal new content
+        }
+    };
+
+##### Constructor: `function(old_content, data)`
+old_content is the existing page content due to be replaced. data contains 
+information about the pending page transition:
+
+* from: from url 
+* to: to url
+* direction: the direction of the transition, 1 or -1
+* state: the "state" object, if the pageload was triggered by popstate
+
+##### `function should_use()`
+Based on information passed to the constructor, return true if this transition
+should be used.
+
+##### `function transition_out(endfade)`
 Function to transition old content off the page. Must call endfade
-callback once done. This option may be null; in that case the
-endfade function is called automatically. Default is to fade out old
-content. The data dict contains the direction, to and from urls, and state
-data for the popstate event if it exists.
+callback once done.
 
-#### transition_in: function (new_content, old_content, data)
-Function to transition new content onto the page. Default is to fade in new 
-content. 
-
-* The direction argument can be used to do sliding transitions through
-  a site.
-* The contentBody argument provides the entire retrieved document, and can 
-  be used to extract extra content out of the site header and footer, for
-  example.
-* The data argument is the same as that for `transition_out` with the addition
-  of contentBody (the html returned by the ajax call)
+##### `function transition_in(new_content, contentBody)`
+Function to transition new_content onto the page. contentBody contains the entire
+retrieved html document if needed. The contentBody argument provides the entire
+retrieved document, and can be used to extract extra content out of the site 
+header and footer, for example.
 
 
 ## API
@@ -165,7 +197,6 @@ eg. `hashban_instance.hijack($('#container'), ':not(.external)');`
 #### loadPage(url, push_state)
 Load the page at url, changing the page state if push_state is true.
 
-
 ### Events
 
 #### hashban-unload
@@ -177,15 +208,15 @@ Triggered after new content has been added to the document.
 
 ## Todo
 
-- Detect middle-click, ⌘+click (Mac) and ctrl+click (Win); use default click behaviour in
-  these cases.
+- Detect middle-click, ⌘+click (Mac) and ctrl+click (Win); use default click 
+  behaviour in these cases.
 - Expose a method for updating the cached page content, so ajax page updates 
   can be remembered if the user goes back to the page.)
 - Handle # in urls (scroll to the element)
 - Prevent/handle simultaneous transitions? (or does this belong in the 
   transition_in method?)
+
+## Todone
+
 - Remember page scroll position and return to it on back (?)
-- Figure out a way to have multiple Hashban instances handling their own transitions. Maybe
-  needs some sort of global register? Maybe a separate object/function with definable rules
-  for delegating transitions to different instances?
 
