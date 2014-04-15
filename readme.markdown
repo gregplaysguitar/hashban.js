@@ -212,11 +212,11 @@ Triggered after new content has been added to the document.
   behaviour in these cases.
 - Expose a method for updating the cached page content, so ajax page updates 
   can be remembered if the user goes back to the page.)
-- Handle # in urls (scroll to the element)
 - Prevent/handle simultaneous transitions? (or does this belong in the 
   transition_in method?)
 
 ## Todone
 
 - Remember page scroll position and return to it on back (?)
+- Handle # in urls (scroll to the element)
 
