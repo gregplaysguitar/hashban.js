@@ -121,7 +121,7 @@ var Hashban = (function($) {
                             'a[href^="' + domain + '"]')
                     .not('[href$=".xml"], [href$=".pdf"], ' + 
                          '[href$=".jpg"], [href$=".gif"], ' + 
-                         '[href$=".png"], [href^="#"]');
+                         '[href$=".png"], [href^="#"], [href^="mailto:"]');
     };
     Hashban.prototype.hijack = function(el, link_filter) {
         // find suitable links within the given element(s), and hijack them
