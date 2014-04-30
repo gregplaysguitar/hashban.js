@@ -90,7 +90,7 @@ the #crumbtrail element on page load.
         // called each time a new page is loaded, ajax or otherwise
         
         if (Modernizr.history) {
-            hashban.hijack($('#content, #crumbtrail'));
+            hashban.hijack($('#content'));
         }
     };
     
@@ -120,7 +120,7 @@ flashing on fast page loads. Default is 300.
 Function which toggles the loading state based on the argument. If
 creating an actual element on the page, it should return this element,
 and reuse it (i.e. don't create a new one each time). Defaults 
-to `$.hashban.loader`, which creates an element with the class
+to `Hashban.prototype.loader`, which creates an element with the class
 'hashban-loader' - if an element with this class already exists in
 the html, it will use that.
 
@@ -212,11 +212,11 @@ Triggered after new content has been added to the document.
   behaviour in these cases.
 - Expose a method for updating the cached page content, so ajax page updates 
   can be remembered if the user goes back to the page.)
-- Handle # in urls (scroll to the element)
 - Prevent/handle simultaneous transitions? (or does this belong in the 
   transition_in method?)
 
 ## Todone
 
 - Remember page scroll position and return to it on back (?)
+- Handle # in urls (scroll to the element)
 

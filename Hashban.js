@@ -228,7 +228,14 @@ var Hashban = (function($) {
                     // button and not a clicked link, restore scroll position
                     if (state && state.scrollTop) {
                         $(window).scrollTop(state.scrollTop);
-                    } 
+                    }
+                    else {
+                        // Otherwise, handle hash fragment if present
+                        var hash = url.split('#')[1];
+                        if (hash && $('#' + hash).length) {
+                            $(window).scrollTop($('#' + hash).offset().top);
+                        }
+                    }
                     
                     // trigger load event here - assume that new content has 
                     // been added in transition_in
