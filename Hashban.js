@@ -89,7 +89,7 @@ var Hashban = (function($) {
         $(window).bind('popstate', function(e) {
             if (e.originalEvent.state && 
                 e.originalEvent.state['handler'] === that.options['uid']) {
-                that.loadPage(window.location.pathname, true);
+                that.loadPage(window.location.pathname, e.originalEvent.state);
                 return false;
             }
         });
@@ -234,6 +234,10 @@ var Hashban = (function($) {
                         var hash = url.split('#')[1];
                         if (hash && $('#' + hash).length) {
                             $(window).scrollTop($('#' + hash).offset().top);
+                        }
+                        else {
+                            // otherwise scroll to top
+                            $(window).scrollTop(0);
                         }
                     }
                     
