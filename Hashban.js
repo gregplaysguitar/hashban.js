@@ -64,7 +64,7 @@ var Hashban = (function($) {
         
         this.CACHE = {};
         this.currentXHR = null;
-        this.previous_url = window.location.pathname; 
+        this.previous_url = window.location.pathname + window.location.search;
         this.options = $.extend({
             contentWrapSelector: '#content',
             transitions: [DefaultTransition],
