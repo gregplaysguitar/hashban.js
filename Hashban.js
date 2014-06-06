@@ -235,6 +235,9 @@ var Hashban = (function($) {
                         if (hash && $('#' + hash).length) {
                             $(window).scrollTop($('#' + hash).offset().top);
                         }
+                        else if (transition.handle_scroll) {
+                            transition.handle_scroll();
+                        }
                         else {
                             // otherwise scroll to top
                             $(window).scrollTop(0);
