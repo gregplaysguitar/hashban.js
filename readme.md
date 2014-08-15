@@ -11,10 +11,15 @@ transitions but with the *exact same urls* as the history-enabled ones.
 
     $(function() {
         if (Modernizr.history) {
+            // Create a Hashban instance for your site
             var hashban = Hashban({
                 contentWrapSelector: '#mycontent'
             });
+            
+            // "hijack" any links which should load in via ajax
             hashban.hijack($('#header nav'));
+            
+            // bind to the popstate event, so the back button will still work
             hashban.bind();
         }
     });
@@ -83,6 +88,7 @@ the #crumbtrail element on page load.
             // apply the plugin to the site nav, only on initial load since it 
             // doesn't change
             hashban.hijack($('#nav'));
+            hashban.bind();
         }                    
     };
     
@@ -185,6 +191,10 @@ header and footer, for example.
 Factory function returning a Hashban instance. Takes an object containing plugin options.
 
 ### Instance methods:
+
+#### bind()
+Binds to the window's `popstate` event, so that pageloads are triggered as expected when
+the back or forward buttons are clicked.
 
 #### hashban(link_collection)
 Hijacks a specific set of links, eg. `hashban_instance.hashban($('a'));`
