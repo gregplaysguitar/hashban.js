@@ -299,6 +299,7 @@ var Hashban = (function($) {
                         if (faded) {
                             fadein();
                         }
+                        this.currentXHR = null;
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         html = jqXHR.responseText;
@@ -306,6 +307,7 @@ var Hashban = (function($) {
                         if (faded) {
                             fadein();
                         }
+                        this.currentXHR = null;
                     }
                 });
             }
