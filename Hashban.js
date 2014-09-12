@@ -196,7 +196,7 @@ var Hashban = (function($) {
                 var contentBody = Hashban.getBody(html),
                     bodyClass = contentBody.attr('class'),
                     contentEl = contentBody.find(
-                                    that.options.contentWrapSelector),
+                                    that.options.contentWrapSelector).clone(),
                     title = getmatch(html, /<title>([\s\S]*?)<\/title>/, 1);
                 
                 if (contentEl.length) {
