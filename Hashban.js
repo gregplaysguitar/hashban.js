@@ -192,7 +192,7 @@ var Hashban = (function($) {
                     bodyClass = contentBody.attr('class'),
                     contentEl = contentBody.find(
                                     that.options.contentWrapSelector),
-                    title = getmatch(html, /<title>([\s\S]*?)<\/title>/, 1);
+                    title = Hashban.getTitle(html);
                 
                 if (contentEl.length) {
                     if (!state) {
@@ -380,6 +380,12 @@ var Hashban = (function($) {
         return $('<div' + 
                  getmatch(html, /<body([^>]*>[\S\s]*)<\/body>/, 1) + 
                  '</div>');
+    };
+    
+    Hashban.getTitle = function (html) {
+        // get title string from an html document
+        
+        return getmatch(html, /<title>([\s\S]*?)<\/title>/, 1);
     };
     
     Hashban.absolute_url = function(url) {
