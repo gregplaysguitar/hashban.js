@@ -1,6 +1,9 @@
 /*
 
-hashban.js is a plugin to streamline the addition of ajax-style page transitions
+Hashban.js version 1.1
+======================
+
+Hashban.js is a plugin to streamline the addition of ajax-style page transitions
 to a website.
 
 Example:
@@ -34,6 +37,8 @@ inheriting from Hashban.DefaultTransition and defining the following methods:
 
 The Transition objects will be tested in order and the first valid one found
 will be used. If none match, the last will be used.
+
+See readme.markdown for more information.
 
 */
 
@@ -191,7 +196,7 @@ var Hashban = (function($) {
                 var contentBody = Hashban.getBody(html),
                     bodyClass = contentBody.attr('class'),
                     contentEl = contentBody.find(
-                                    that.options.contentWrapSelector),
+                                    that.options.contentWrapSelector).clone(),
                     title = Hashban.getTitle(html);
                 
                 if (contentEl.length) {
@@ -294,6 +299,7 @@ var Hashban = (function($) {
                         if (faded) {
                             fadein();
                         }
+                        this.currentXHR = null;
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         html = jqXHR.responseText;
@@ -301,6 +307,7 @@ var Hashban = (function($) {
                         if (faded) {
                             fadein();
                         }
+                        this.currentXHR = null;
                     }
                 });
             }
