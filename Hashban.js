@@ -94,7 +94,7 @@ var Hashban = (function($) {
         $(window).bind('popstate', function(e) {
             if (e.originalEvent.state && 
                 e.originalEvent.state['handler'] === that.options['uid']) {
-                that.loadPage(window.location.pathname, e.originalEvent.state);
+                that.loadPage(window.location.pathname + window.location.search, e.originalEvent.state);
                 return false;
             }
         });
